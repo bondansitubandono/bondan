@@ -1,0 +1,139 @@
+ function allposts2()
+    {   
+        $query = "
+		SELECT t1.fc_member, t1.fc_referral_id, t1.fv_member,p.fv_province,c.fv_city, 1 AS level
+		, t1.fc_referral_id AS level1, null as level2, null as level3, null as level4, null as level5,null as level6, null as level7, null as level8, null as level9, null as level10
+		, t1.fc_referral_id AS path
+		FROM tm_member AS t1
+		JOIN tm_province AS p ON p.fc_province =t1.fc_province
+		JOIN tm_city AS c ON c.fc_city =t1.fc_city
+		WHERE t1.fc_referral_from ='".$this->session->userdata('fc_referral_id')."'
+		UNION ALL
+		SELECT t2.fc_member, t2.fc_referral_id, t2.fv_member,p.fv_province,c.fv_city, 2 AS level
+		, t1.fc_referral_id AS level1, t2.fc_referral_id as level2, null as level3, null as level4, null as level5,null as level6, null as level7, null as level8, null as level9, null as level10
+		, concat(t1.fc_referral_id,'/',t2.fc_referral_id) AS path
+		FROM tm_member AS t1
+		JOIN tm_member AS t2 ON t2.fc_referral_from = t1.fc_referral_id
+		JOIN tm_province AS p ON p.fc_province =t1.fc_province
+		JOIN tm_city AS c ON c.fc_city =t1.fc_city
+		WHERE t1.fc_referral_from ='".$this->session->userdata('fc_referral_id')."'
+		UNION ALL
+		SELECT t3.fc_member, t3.fc_referral_id, t3.fv_member,p.fv_province,c.fv_city, 3 AS level
+		, t1.fc_referral_id AS level1, t2.fc_referral_id as level2, t3.fc_referral_id as level3, null as level4, null as level5,null as level6, null as level7, null as level8, null as level9, null as level10
+		, concat(t1.fc_referral_id,'/',t2.fc_referral_id,'/',t3.fc_referral_id) AS path
+		FROM tm_member AS t1
+		JOIN tm_member AS t2 ON t2.fc_referral_from = t1.fc_referral_id
+		JOIN tm_member AS t3 ON t3.fc_referral_from = t2.fc_referral_id
+		JOIN tm_province AS p ON p.fc_province =t1.fc_province
+		JOIN tm_city AS c ON c.fc_city =t1.fc_city
+		WHERE t1.fc_referral_from ='".$this->session->userdata('fc_referral_id')."'
+		UNION ALL
+		SELECT t4.fc_member, t4.fc_referral_id, t4.fv_member,p.fv_province,c.fv_city, 4 AS level
+		, t1.fc_referral_id AS level1, t2.fc_referral_id as level2, t3.fc_referral_id as level3, t4.fc_referral_id as level4, null as level5, null as level6, null as level7, null as level8, null as level9, null as level10
+		, concat(t1.fc_referral_id,'/',t2.fc_referral_id,'/',t3.fc_referral_id,'/',t4.fc_referral_id) AS path
+		FROM tm_member AS t1
+		JOIN tm_member AS t2 ON t2.fc_referral_from = t1.fc_referral_id
+		JOIN tm_member AS t3 ON t3.fc_referral_from = t2.fc_referral_id
+		JOIN tm_member AS t4 ON t4.fc_referral_from = t3.fc_referral_id
+		JOIN tm_province AS p ON p.fc_province =t1.fc_province
+		JOIN tm_city AS c ON c.fc_city =t1.fc_city
+		WHERE t1.fc_referral_from ='".$this->session->userdata('fc_referral_id')."'
+		UNION ALL
+		SELECT t5.fc_member, t5.fc_referral_id, t5.fv_member,p.fv_province,c.fv_city, 5 AS level
+		, t1.fc_referral_id AS level1, t2.fc_referral_id as level2, t3.fc_referral_id as level3, t4.fc_referral_id as level4, 
+		t5.fc_referral_id as level5, null as level6, null as level7,null as level8, null as level9, null as level10
+		, concat(t1.fc_referral_id,'/',t2.fc_referral_id,'/',t3.fc_referral_id,'/',t4.fc_referral_id,'/',t5.fc_referral_id) AS path
+		FROM tm_member AS t1
+		JOIN tm_member AS t2 ON t2.fc_referral_from = t1.fc_referral_id
+		JOIN tm_member AS t3 ON t3.fc_referral_from = t2.fc_referral_id
+		JOIN tm_member AS t4 ON t4.fc_referral_from = t3.fc_referral_id
+		JOIN tm_member AS t5 ON t5.fc_referral_from = t4.fc_referral_id
+		JOIN tm_province AS p ON p.fc_province =t1.fc_province
+		JOIN tm_city AS c ON c.fc_city =t1.fc_city
+		WHERE t1.fc_referral_from ='".$this->session->userdata('fc_referral_id')."'
+		UNION ALL
+		SELECT t6.fc_member, t6.fc_referral_id, t6.fv_member,p.fv_province,c.fv_city, 6 AS level
+		, t1.fc_referral_id AS level1, t2.fc_referral_id as level2, t3.fc_referral_id as level3, t4.fc_referral_id as level4, 
+		t5.fc_referral_id as level5, t6.fc_referral_id as level6, null as level7, null as level8, null as level9, null as level10
+		, concat(t1.fc_referral_id,'/',t2.fc_referral_id,'/',t3.fc_referral_id,'/',t4.fc_referral_id,'/',t5.fc_referral_id,'/',t6.fc_referral_id) AS path
+		FROM tm_member AS t1
+		JOIN tm_member AS t2 ON t2.fc_referral_from = t1.fc_referral_id
+		JOIN tm_member AS t3 ON t3.fc_referral_from = t2.fc_referral_id
+		JOIN tm_member AS t4 ON t4.fc_referral_from = t3.fc_referral_id
+		JOIN tm_member AS t5 ON t5.fc_referral_from = t4.fc_referral_id
+		JOIN tm_member AS t6 ON t6.fc_referral_from = t5.fc_referral_id
+		JOIN tm_province AS p ON p.fc_province =t1.fc_province
+		JOIN tm_city AS c ON c.fc_city =t1.fc_city
+		WHERE t1.fc_referral_from ='".$this->session->userdata('fc_referral_id')."'
+		UNION ALL
+		SELECT t7.fc_member, t7.fc_referral_id, t7.fv_member,p.fv_province,c.fv_city, 7 AS level
+		, t1.fc_referral_id AS level1, t2.fc_referral_id as level2, t3.fc_referral_id as level3, t4.fc_referral_id as level4, 
+		t5.fc_referral_id as level5, t6.fc_referral_id as level6, t7.fc_referral_id as level7, null as level8, null as level9, null as level10
+		, concat(t1.fc_referral_id,'/',t2.fc_referral_id,'/',t3.fc_referral_id,'/',t4.fc_referral_id,'/',t5.fc_referral_id,'/',t6.fc_referral_id,'/',t7.fc_referral_id) AS path
+		FROM tm_member AS t1
+		JOIN tm_member AS t2 ON t2.fc_referral_from = t1.fc_referral_id
+		JOIN tm_member AS t3 ON t3.fc_referral_from = t2.fc_referral_id
+		JOIN tm_member AS t4 ON t4.fc_referral_from = t3.fc_referral_id
+		JOIN tm_member AS t5 ON t5.fc_referral_from = t4.fc_referral_id
+		JOIN tm_member AS t6 ON t6.fc_referral_from = t5.fc_referral_id
+		JOIN tm_member AS t7 ON t7.fc_referral_from = t6.fc_referral_id
+		JOIN tm_province AS p ON p.fc_province =t1.fc_province
+		JOIN tm_city AS c ON c.fc_city =t1.fc_city
+		WHERE t1.fc_referral_from ='".$this->session->userdata('fc_referral_id')."'
+		UNION ALL
+		SELECT t8.fc_member, t8.fc_referral_id, t8.fv_member,p.fv_province,c.fv_city, 8 AS level
+		, t1.fc_referral_id AS level1, t2.fc_referral_id as level2, t3.fc_referral_id as level3, t4.fc_referral_id as level4, 
+		t5.fc_referral_id as level5, t6.fc_referral_id as level6, t7.fc_referral_id as level7, t8.fc_referral_id as level8, null as level9, null as level10
+		, concat(t1.fc_referral_id,'/',t2.fc_referral_id,'/',t3.fc_referral_id,'/',t4.fc_referral_id,'/',t5.fc_referral_id,'/',t6.fc_referral_id,'/',t7.fc_referral_id,'/',t8.fc_referral_id) AS path
+		FROM tm_member AS t1
+		JOIN tm_member AS t2 ON t2.fc_referral_from = t1.fc_referral_id
+		JOIN tm_member AS t3 ON t3.fc_referral_from = t2.fc_referral_id
+		JOIN tm_member AS t4 ON t4.fc_referral_from = t3.fc_referral_id
+		JOIN tm_member AS t5 ON t5.fc_referral_from = t4.fc_referral_id
+		JOIN tm_member AS t6 ON t6.fc_referral_from = t5.fc_referral_id
+		JOIN tm_member AS t7 ON t7.fc_referral_from = t6.fc_referral_id
+		JOIN tm_member AS t8 ON t8.fc_referral_from = t7.fc_referral_id
+		JOIN tm_province AS p ON p.fc_province =t1.fc_province
+		JOIN tm_city AS c ON c.fc_city =t1.fc_city
+		WHERE t1.fc_referral_from ='".$this->session->userdata('fc_referral_id')."'
+		UNION ALL
+		SELECT t9.fc_member, t9.fc_referral_id, t9.fv_member,p.fv_province,c.fv_city, 9 AS level
+		, t1.fc_referral_id AS level1, t2.fc_referral_id as level2, t3.fc_referral_id as level3, t4.fc_referral_id as level4, 
+		t5.fc_referral_id as level5, t6.fc_referral_id as level6, t7.fc_referral_id as level7, t8.fc_referral_id as level8,  t9.fc_referral_id as level9, null as level10
+		, concat(t1.fc_referral_id,'/',t2.fc_referral_id,'/',t3.fc_referral_id,'/',t4.fc_referral_id,'/',t5.fc_referral_id,'/',t6.fc_referral_id,'/',t7.fc_referral_id,'/',t8.fc_referral_id,'/',t9.fc_referral_id) AS path
+		FROM tm_member AS t1
+		JOIN tm_member AS t2 ON t2.fc_referral_from = t1.fc_referral_id
+		JOIN tm_member AS t3 ON t3.fc_referral_from = t2.fc_referral_id
+		JOIN tm_member AS t4 ON t4.fc_referral_from = t3.fc_referral_id
+		JOIN tm_member AS t5 ON t5.fc_referral_from = t4.fc_referral_id
+		JOIN tm_member AS t6 ON t6.fc_referral_from = t5.fc_referral_id
+		JOIN tm_member AS t7 ON t7.fc_referral_from = t6.fc_referral_id
+		JOIN tm_member AS t8 ON t8.fc_referral_from = t7.fc_referral_id
+		JOIN tm_member AS t9 ON t9.fc_referral_from = t8.fc_referral_id
+		JOIN tm_province AS p ON p.fc_province =t1.fc_province
+		JOIN tm_city AS c ON c.fc_city =t1.fc_city
+		WHERE t1.fc_referral_from ='".$this->session->userdata('fc_referral_id')."'
+		UNION ALL
+		SELECT t10.fc_member, t10.fc_referral_id, t10.fv_member,p.fv_province,c.fv_city, 10 AS level
+		, t1.fc_referral_id AS level1, t2.fc_referral_id as level2, t3.fc_referral_id as level3, t4.fc_referral_id as level4, 
+		t5.fc_referral_id as level5, t6.fc_referral_id as level6, t7.fc_referral_id as level7, t8.fc_referral_id as level8,  t9.fc_referral_id as level9, t10.fc_referral_id as level10
+		, concat(t1.fc_referral_id,'/',t2.fc_referral_id,'/',t3.fc_referral_id,'/',t4.fc_referral_id,'/',t5.fc_referral_id,'/',t6.fc_referral_id,'/',t7.fc_referral_id,'/',t8.fc_referral_id,'/',t9.fc_referral_id,'/',t10.fc_referral_id) AS path
+		FROM tm_member AS t1
+		JOIN tm_member AS t2 ON t2.fc_referral_from = t1.fc_referral_id
+		JOIN tm_member AS t3 ON t3.fc_referral_from = t2.fc_referral_id
+		JOIN tm_member AS t4 ON t4.fc_referral_from = t3.fc_referral_id
+		JOIN tm_member AS t5 ON t5.fc_referral_from = t4.fc_referral_id
+		JOIN tm_member AS t6 ON t6.fc_referral_from = t5.fc_referral_id
+		JOIN tm_member AS t7 ON t7.fc_referral_from = t6.fc_referral_id
+		JOIN tm_member AS t8 ON t8.fc_referral_from = t7.fc_referral_id
+		JOIN tm_member AS t9 ON t9.fc_referral_from = t8.fc_referral_id
+		JOIN tm_member AS t10 ON t10.fc_referral_from = t9.fc_referral_id
+		JOIN tm_province AS p ON p.fc_province =t1.fc_province
+		JOIN tm_city AS c ON c.fc_city =t1.fc_city
+		WHERE t1.fc_referral_from ='".$this->session->userdata('fc_referral_id')."'
+		";
+		$query = $this->db->query($query);
+        if($query->num_rows()>0)
+        { return $query->result();}
+        else{return null;}
+    }
